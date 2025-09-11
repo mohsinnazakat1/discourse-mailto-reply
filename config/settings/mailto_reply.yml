@@ -1,17 +1,17 @@
 mailto_reply:
   mailto_reply_enabled:
     default: false
+    type: bool
     client: true
-    description: "Enable mailto reply functionality"
   mailto_reply_address:
     default: ""
+    type: string
     client: true
-    description: "Email address for mailing list replies"
   mailto_reply_include_quoted_text:
     default: true
+    type: bool
     client: true
-    description: "Include quoted original message in email body"
   mailto_reply_include_headers:
     default: true
+    type: bool
     client: true
-    description: "Include email threading headers"

@@ -3,18 +3,11 @@
 # version: 1.0.0
 # authors: YourName
 # url: https://github.com/yourusername/discourse-mailto-reply
-gem "sentry-ruby", "5.11.0"
-gem "sentry-rails", "5.11.0"
 
-require 'sentry-ruby'
-require 'sentry-rails'
-
-enabled_site_setting :mailto_reply_enabled
-
+# Remove the register_setting lines and enabled_site_setting for now
 PLUGIN_NAME = "discourse-mailto-reply".freeze
 
 after_initialize do
-  # Add routes
   Sentry.init do |config|
     config.dsn = 'https://e8421ac2f8734f24b68c5bb3e9aa4ace@o4509722905673728.ingest.de.sentry.io/4509722907770960'
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
@@ -23,6 +16,13 @@ after_initialize do
     # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
     config.send_default_pii = true
   end
+  # Only proceed if the setting exists and is enabled
+  return unless defined?(SiteSetting.mailto_reply_enabled) && SiteSetting.mailto_reply_enabled
+
+  # Load the lib file first
+  require_dependency File.expand_path('../lib/mailto_link_generator.rb', __FILE__)
+
+  # Add routes
   Discourse::Application.routes.append do
     get '/mailto-reply-link' => 'mailto_reply#generate_link'
   end
@@ -35,6 +35,6 @@ after_initialize do
     SiteSetting.mailto_reply_enabled && scope.authenticated?
   end
 
-  # Register plugin
+  # Register asset
   register_asset "stylesheets/mailto-reply.scss"
 end
