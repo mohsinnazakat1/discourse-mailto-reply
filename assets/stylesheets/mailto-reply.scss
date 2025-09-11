@@ -1,0 +1,23 @@
+.mailto-reply-btn {
+  margin-left: 5px;
+  
+  .d-icon {
+    margin-right: 3px;
+  }
+
+  &:hover {
+    background-color: var(--primary-low);
+  }
+}
+
+.mailto-reply-wrapper {
+  display: inline-block;
+}
+
+// Responsive adjustments
+@media screen and (max-width: 767px) {
+  .mailto-reply-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

@@ -1,0 +1,13 @@
+en:
+  js:
+    mailto_reply:
+      button_text: "Email Reply"
+      button_title: "Reply via email client"
+      error_generating_link: "Error generating email link"
+      email_client_should_open: "Your email client should open with a pre-composed reply"
+
+  site_settings:
+    mailto_reply_enabled: "Enable mailto reply functionality"
+    mailto_reply_address: "Mailing list email address"
+    mailto_reply_include_quoted_text: "Include quoted text in email body"
+    mailto_reply_include_headers: "Include email threading headers"
