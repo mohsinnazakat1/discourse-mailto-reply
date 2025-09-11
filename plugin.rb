@@ -4,7 +4,6 @@
 # authors: YourName
 # url: https://github.com/yourusername/discourse-mailto-reply
 
-# Remove the register_setting lines and enabled_site_setting for now
 PLUGIN_NAME = "discourse-mailto-reply".freeze
 
 after_initialize do
@@ -16,25 +15,26 @@ after_initialize do
     # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
     config.send_default_pii = true
   end
-  # Only proceed if the setting exists and is enabled
-  return unless defined?(SiteSetting.mailto_reply_enabled) && SiteSetting.mailto_reply_enabled
+  # Check if settings exist and are enabled
+  if defined?(SiteSetting.mailto_reply_enabled) && SiteSetting.mailto_reply_enabled
+    
+    # Load the lib file first
+    require_dependency File.expand_path('../lib/mailto_link_generator.rb', __FILE__)
 
-  # Load the lib file first
-  require_dependency File.expand_path('../lib/mailto_link_generator.rb', __FILE__)
+    # Add routes
+    Discourse::Application.routes.append do
+      get '/mailto-reply-link' => 'mailto_reply#generate_link'
+    end
 
-  # Add routes
-  Discourse::Application.routes.append do
-    get '/mailto-reply-link' => 'mailto_reply#generate_link'
+    # Load controller
+    require_dependency File.expand_path('../app/controllers/mailto_reply_controller.rb', __FILE__)
+    
+    # Add serializer fields
+    add_to_serializer(:post, :can_mailto_reply) do
+      SiteSetting.mailto_reply_enabled && scope.authenticated?
+    end
+
+    # Register asset
+    register_asset "stylesheets/mailto-reply.scss"
   end
-
-  # Load controller
-  require_dependency File.expand_path('../app/controllers/mailto_reply_controller.rb', __FILE__)
-  
-  # Add serializer fields
-  add_to_serializer(:post, :can_mailto_reply) do
-    SiteSetting.mailto_reply_enabled && scope.authenticated?
-  end
-
-  # Register asset
-  register_asset "stylesheets/mailto-reply.scss"
 end
