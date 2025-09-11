@@ -1,0 +1,13 @@
+plugins:
+  mailto_reply_enabled:
+    default: true
+    client: true
+  mailto_reply_to_address:
+    default: "list@example.org"
+    client: true
+  mailto_reply_include_body:
+    default: true
+    client: true
+  mailto_reply_include_headers:
+    default: true
+    client: true
